@@ -86,7 +86,7 @@ public class OrganizationController {
         
         if (result.hasErrors()) {
             model.addAttribute("organizations", organizationDao.getAllOrganization());
-            return "editorganizations";
+            return "editOrganization";
         }
         organizationDao.updateOrganization(organization.getOrganizationId(), organization);
         

@@ -79,8 +79,11 @@ public class LocationDaoDB implements LocationDao {
     }
 
     @Override
-    @Transactional
+    @Transactional 
     public void deleteLocation(int locationId) {
+        final String DELETE_HEROSIGHTINGS="DELETE hs.* FROM HeroSightings hs"
+                + " JOIN SIGHTING s on hs.sightingId= s.sightingId WHERE locationId=?";
+        jdbc.update(DELETE_HEROSIGHTINGS,locationId);
         final String DELETE_SIGHTING = "DELETE FROM sighting "
                 + "WHERE locationId = ?";
         jdbc.update(DELETE_SIGHTING, locationId);
