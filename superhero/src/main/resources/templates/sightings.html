@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+            <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
+            <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+
+            <title>SuperHeroes</title>
+    </head>
+    <body>
+        <!-- Main Body of Page -->
+        <div class="container">
+            <div class="row m-4">
+                <div id="header" class="col text-center border border-danger shadow-lg p-3 mb-5 bg-white rounded">
+                    <h1><a href="/" class="text-dark">SuperHeroes</a></h1>
+                    <span><img th:src="@{img/super_garfield_v1.jfif}" style="width: 100px" /></span>
+                </div>
+            </div>
+            <div class="row m-4 border border-success shadow-lg p-3 mb-5 bg-white rounded">
+                <div class="col text-center m-3">
+                    <a href="/" class="btn btn-outline-primary btn-lg">HomePage</a>
+                </div>
+                <div class="col text-center m-3">
+                    <a href="heroes" class="btn btn-outline-primary btn-lg">Heroes</a>
+                </div>
+                <div class="col text-center m-3">
+                    <a href="locations" class="btn btn-outline-primary btn-lg">Locations</a>
+                </div>
+                <div class="col text-center m-3">
+                    <a href="organizations" class="btn btn-outline-primary btn-lg">Organizations</a>
+                </div>
+                <div class="col text-center m-3">
+                    <a href="sightings" class="btn btn-outline-primary btn-lg">Sightings</a>
+                </div>
+                <div class="col text-center m-3">
+                    <a href="10LatestSightings" class="btn btn-outline-primary btn-lg">10 Latest_Sightings</a>
+                </div>
+                <div class="col text-center m-3">
+                    <a href="contactUs" class="btn btn-outline-primary btn-lg">Contact_US</a>
+                </div>
+            </div>
+            <div class="row m-4 border border-success shadow-lg p-3 mb-5 bg-white rounded">
+                <div class="col-3 text-center m-3">
+                    <span class="h3">Add Sighting</span>
+                </div>
+                <div class="col-7 text-center m-3">
+                    <form action="addSighting" method="POST">
+                        <div class="form-group row">
+                            <label for="date" class="col-3 col-form-label" >
+                                Date</label>
+                            <div class="col-9">
+                                <input type="datetime-local" name="date" 
+                                       id="date" class="form-control" required
+                                       />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="location" class="col-3 col-form-label">
+                                Location</label>
+                            <div class="col-9">
+                                <select id="location" name="locationId" class="form-control" >
+                                    <option th:each="location:${locations}" 
+                                            th:value="${location.locationId}" 
+                                            th:text="${location.name + ' ' 
+                                            + location.address}">
+                                        Location Name</option>
+                                </select>
+
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="hero" class="col-3 col-form-label">
+                                Heroes</label>
+                            <div class="col-9">
+                                <select multiple id="hero" name="heroId" 
+                                        class="form-control" required >
+                                    <option th:each="hero:${heros}" 
+                                            th:value="${hero.heroId}" 
+                                            th:text="${hero.Name + ' ' 
+                                            + hero.superPower}">
+                                        Hero Name</option>
+                                </select>
+                                <!--                                <div th:if="${#fields.hasErrors('sighting.heros')}">
+                                                                    <p th:each="error : ${#fields.errors('sighting.heros')}" 
+                                                                       class="alert alert-danger" th:text="${error}"> 
+                                                                        Bad Hero </p>
+                                                                </div>-->
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add Sighting</button>
+                    </form>
+                </div>
+            </div>
+            <div class="row m-4 border border-success shadow-lg p-3 mb-5 bg-white rounded">
+                <div class="col text-center m-3">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Date&Time</th>
+                                <th>Location</th>
+                                <th>Location_Map</th>
+                                <th>Edit</th>
+                                <th>Details</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="sighting:${sightings}">
+                                <td th:text="${sighting.sightingId}">Location ID</td>
+                                <td th:text="${sighting.date}">Sighting Date</td>
+                                <td th:text="${sighting.location.name}">Location Description</td>    
+                                <td>
+                                    <div>
+                                        <iframe width="400" height="400" frameborder="0" th:src="${sighting.sightingLocation}" scrolling="no">
+                                        </iframe>
+                                    </div>
+                                </td>
+                                <td><a href="#" th:href="@{/editSighting(id=${sighting.sightingId})}">Edit</a></td>
+                                <td><a href="#" th:href="@{/detailSighting(id=${sighting.sightingId})}">Detail</a></td>
+                                <td><button type="button" class="btn btn-primary" data-toggle="modal" th:data-target="'#delete'+${sighting.sightingId}">Delete</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="modal" tabindex="-1" role="dialog" th:id="'delete'+${sighting.sightingId}" th:each="sighting:${sightings}">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Delete Sighting?</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true"></span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to delete this sighting?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Don't Delete!</button>
+                        <a class="btn btn-primary" href="#" th:href="@{/deleteSighting(id=${sighting.sightingId})}">Save changes</a>
+                    </div>
+                </div>
+            </div>
+        </div>                         
+        <!-- End main body -->
+
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    </body>
+</html>

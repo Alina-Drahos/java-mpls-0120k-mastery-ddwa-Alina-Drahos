@@ -1,0 +1,15 @@
+
+/*-- some CSS --*/
+
+h1,div,a{
+    font-family: 'Permanent Marker', cursive;
+    color:indigo!important;
+}
+#header{
+    border-width:20px!important;
+}
+.eye{
+    text-decoration: underline;
+    color:green!important;
+}
+
